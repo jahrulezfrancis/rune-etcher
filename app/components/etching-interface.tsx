@@ -43,9 +43,6 @@ export function EtchingInterface() {
   const { address, isConnected, isConnecting } = useAccount()
   const { chain } = useNetwork()
 
-  const isTestNetwork = chain?.name.toLowerCase() === "starknet sepolia testnet"
-
-
   const validateForm = () => {
     const newErrors: string[] = []
 
@@ -75,7 +72,7 @@ export function EtchingInterface() {
       return
     }
 
-    if (!isTestNetwork) {
+    if (chain?.name.toLowerCase() !== "sepolia") {
       alert("Please switch to Starknet Sepolia testnet!")
       return
     }
@@ -150,7 +147,7 @@ export function EtchingInterface() {
 
   if (success) {
     return (
-      <div className="w-full max-w-2xl mx-auto px-4">
+      <div className="w-full max-w-4xl mx-auto px-4">
         <Card className="bg-black/40 backdrop-blur-sm border-green-500/30 dark:bg-black/40 light:bg-white/80">
           <CardContent className="p-4 md:p-8 text-center">
             <CheckCircle className="h-12 md:h-16 w-12 md:w-16 text-green-400 mx-auto mb-4" />
@@ -168,7 +165,7 @@ export function EtchingInterface() {
                   variant="ghost"
                   size="sm"
                   onClick={() => window.open(`https://mempool.space/testnet/tx/${txHashes.bitcoin}`, "_blank")}
-                  className="text-xs text-blue-400 font-mono hover:text-blue-300 break-all"
+                  className="text-xs text-blue-400 font-mono hover:text-blue-300 break-all max-w-full"
                 >
                   {txHashes.bitcoin.slice(0, 8)}...{txHashes.bitcoin.slice(-8)}
                 </Button>
@@ -186,7 +183,7 @@ export function EtchingInterface() {
                         : `https://starkscan.co/tx/${txHashes.starknet}`
                     window.open(explorerUrl, "_blank")
                   }}
-                  className="text-xs text-blue-400 font-mono hover:text-blue-300 break-all"
+                  className="text-xs text-blue-400 font-mono hover:text-blue-300 break-all max-w-full"
                 >
                   {txHashes.starknet.slice(0, 8)}...{txHashes.starknet.slice(-8)}
                 </Button>
@@ -203,7 +200,7 @@ export function EtchingInterface() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 px-4">
+    <div className="w-full max-w-6xl mx-auto px-4">
       <Card className="bg-black/40 backdrop-blur-sm border-orange-500/30 dark:bg-black/40 light:bg-white/80">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-orange-400 text-lg md:text-xl">
@@ -225,7 +222,7 @@ export function EtchingInterface() {
             </Alert>
           )}
 
-          {isConnected && !isTestNetwork && (
+          {isConnected && chain?.name.toLowerCase() !== "sepolia" && (
             <Alert className="border-red-500/30 bg-red-500/10">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription className="text-red-400 text-sm">
@@ -365,7 +362,7 @@ export function EtchingInterface() {
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Connecting Wallet...
               </>
-            ) : !isTestNetwork ? (
+            ) : chain?.name.toLowerCase() !== "sepolia" ? (
               <>
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Switch to Sepolia Testnet
