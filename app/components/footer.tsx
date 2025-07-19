@@ -77,7 +77,7 @@ export function Footer() {
 
         <div className="border-t border-white/10 mt-8 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            © 2024 Rune Etcher. Open source under MIT License.
+            © 2025 Rune Etcher. Open source under MIT License.
             <br />
             <span className="text-orange-400">⚠️ Testnet Only - Not for Production Use</span>
           </p>

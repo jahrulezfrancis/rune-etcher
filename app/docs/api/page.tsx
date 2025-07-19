@@ -51,7 +51,7 @@ export default function APIReferencePage() {
               <div className="flex items-center justify-center gap-2 mb-8">
                 <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                   <Calendar className="h-4 w-4 mr-1" />
-                  Expected: Q2 2024
+                  Expected: Q4 2025
                 </Badge>
               </div>
             </CardContent>
