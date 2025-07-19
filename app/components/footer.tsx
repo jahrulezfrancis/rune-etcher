@@ -17,22 +17,22 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link href="/docs">
-                  <a className="hover:text-white transition-colors">Documentation</a>
+                  <p className="hover:text-white transition-colors">Documentation</p>
                 </Link>
               </li>
               <li>
                 <Link href="/docs/architecture">
-                  <a className="hover:text-white transition-colors">Architecture</a>
+                  <p className="hover:text-white transition-colors">Architecture</p>
                 </Link>
               </li>
               <li>
                 <Link href="/docs/bridge-guide">
-                  <a className="hover:text-white transition-colors">Bridge Guide</a>
+                  <p className="hover:text-white transition-colors">Bridge Guide</p>
                 </Link>
               </li>
               <li>
                 <Link href="/docs/api">
-                  <a className="hover:text-white transition-colors">API Reference</a>
+                  <p className="hover:text-white transition-colors">API Reference</p>
                 </Link>
               </li>
             </ul>
