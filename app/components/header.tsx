@@ -133,7 +133,7 @@ export function Header() {
                 variant="outline"
                 size="sm"
                 className="hidden md:flex border-gray-600 text-gray-300 hover:bg-gray-800 bg-transparent text-xs"
-                onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher-main", "_blank")}
+                onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher", "_blank")}
               >
                 <ExternalLink className="h-3 w-3 mr-1" />
                 GitHub
@@ -243,7 +243,7 @@ export function Header() {
                       <Button
                         variant="ghost"
                         className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 dark:text-gray-300 dark:hover:text-white light:text-gray-700 light:hover:text-gray-900"
-                        onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher-main", "_blank")}
+                        onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher", "_blank")}
                       >
                         <ExternalLink className="h-4 w-4 mr-3" />
                         GitHub Repository

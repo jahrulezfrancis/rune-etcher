@@ -72,5 +72,6 @@
   },
   "main": "index.js",
   "license": "MIT",
-  "author": "jahrulezfrancis"
+  "author": "jahrulezfrancis",
+  "repository": "https://github.com/jahrulezfrancis/rune-etcher.git"
 }
