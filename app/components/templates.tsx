@@ -124,86 +124,106 @@ export function Templates() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <Card className="bg-black/40 backdrop-blur-sm border-pink-500/30 mb-6">
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <Card className="bg-black/40 backdrop-blur-sm border-pink-500/30 dark:bg-black/40 light:bg-white/80 mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-pink-400">
-            <Rocket className="h-6 w-6" />🚀 Rune Templates
+          <CardTitle className="flex items-center gap-2 text-pink-400 text-lg md:text-xl">
+            <Rocket className="h-5 w-5 md:h-6 md:w-6" />🚀 Rune Templates
           </CardTitle>
-          <CardDescription className="text-gray-300">
+          <CardDescription className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-sm md:text-base">
             Quick-start templates for popular meme Runes. One-click to mint!
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <div className="flex gap-2 mb-6">
-            <Button
-              variant={selectedCategory === "all" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("all")}
-              className={selectedCategory === "all" ? "bg-pink-500" : "border-gray-600 text-gray-300"}
-            >
-              All Templates
-            </Button>
-            <Button
-              variant={selectedCategory === "meme" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("meme")}
-              className={selectedCategory === "meme" ? "bg-pink-500" : "border-gray-600 text-gray-300"}
-            >
-              😂 Memes
-            </Button>
-            <Button
-              variant={selectedCategory === "trending" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("trending")}
-              className={selectedCategory === "trending" ? "bg-pink-500" : "border-gray-600 text-gray-300"}
-            >
-              🔥 Trending
-            </Button>
-            <Button
-              variant={selectedCategory === "featured" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("featured")}
-              className={selectedCategory === "featured" ? "bg-pink-500" : "border-gray-600 text-gray-300"}
-            >
-              ⭐ Featured
-            </Button>
+        <CardContent className="p-4 md:p-6">
+          <div className="mb-6">
+            <div className="overflow-x-auto">
+              <div className="flex gap-2 min-w-max">
+                <Button
+                  variant={selectedCategory === "all" ? "default" : "outline"}
+                  onClick={() => setSelectedCategory("all")}
+                  className={`${
+                    selectedCategory === "all" ? "bg-pink-500" : "border-gray-600 text-gray-300"
+                  } text-xs md:text-sm whitespace-nowrap`}
+                >
+                  All Templates
+                </Button>
+                <Button
+                  variant={selectedCategory === "meme" ? "default" : "outline"}
+                  onClick={() => setSelectedCategory("meme")}
+                  className={`${
+                    selectedCategory === "meme" ? "bg-pink-500" : "border-gray-600 text-gray-300"
+                  } text-xs md:text-sm whitespace-nowrap`}
+                >
+                  😂 Memes
+                </Button>
+                <Button
+                  variant={selectedCategory === "trending" ? "default" : "outline"}
+                  onClick={() => setSelectedCategory("trending")}
+                  className={`${
+                    selectedCategory === "trending" ? "bg-pink-500" : "border-gray-600 text-gray-300"
+                  } text-xs md:text-sm whitespace-nowrap`}
+                >
+                  🔥 Trending
+                </Button>
+                <Button
+                  variant={selectedCategory === "featured" ? "default" : "outline"}
+                  onClick={() => setSelectedCategory("featured")}
+                  className={`${
+                    selectedCategory === "featured" ? "bg-pink-500" : "border-gray-600 text-gray-300"
+                  } text-xs md:text-sm whitespace-nowrap`}
+                >
+                  ⭐ Featured
+                </Button>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {filteredTemplates.map((template) => (
               <Card
                 key={template.id}
-                className="bg-gray-800/30 border-gray-600 hover:border-pink-500/50 transition-colors"
+                className="bg-gray-800/30 dark:bg-gray-800/30 light:bg-gray-100 border-gray-600 dark:border-gray-600 light:border-gray-300 hover:border-pink-500/50 transition-colors"
               >
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-3 p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{template.emoji}</span>
-                      <Badge className="bg-orange-500 text-white font-bold">{template.ticker}</Badge>
+                      <Badge className="bg-orange-500 text-white font-bold text-xs md:text-sm">{template.ticker}</Badge>
                     </div>
                     <div className="flex items-center gap-1">
                       {getCategoryIcon(template.category)}
-                      <span className="text-xs text-gray-400 capitalize">{template.category}</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-400 light:text-gray-600 capitalize">
+                        {template.category}
+                      </span>
                     </div>
                   </div>
-                  <CardTitle className="text-lg text-white">{template.name}</CardTitle>
+                  <CardTitle className="text-base md:text-lg text-white dark:text-white light:text-gray-900">
+                    {template.name}
+                  </CardTitle>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-300">{template.description}</p>
+                <CardContent className="space-y-4 p-4">
+                  <p className="text-xs md:text-sm text-gray-300 dark:text-gray-300 light:text-gray-600">
+                    {template.description}
+                  </p>
 
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <span className="text-gray-400">Supply:</span>
-                      <span className="text-white ml-1">{formatNumber(template.totalSupply)}</span>
+                      <span className="text-gray-400 dark:text-gray-400 light:text-gray-600">Supply:</span>
+                      <span className="text-white dark:text-white light:text-gray-900 ml-1">
+                        {formatNumber(template.totalSupply)}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-gray-400">Premine:</span>
+                      <span className="text-gray-400 dark:text-gray-400 light:text-gray-600">Premine:</span>
                       <span className="text-yellow-400 ml-1">{template.preminePercent}%</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-400">Popularity:</span>
+                      <span className="text-xs text-gray-400 dark:text-gray-400 light:text-gray-600">Popularity:</span>
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -222,7 +242,7 @@ export function Templates() {
 
                   <Button
                     onClick={() => handleMintTemplate(template)}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white text-xs md:text-sm"
                   >
                     <Zap className="h-4 w-4 mr-2" />
                     Mint {template.ticker}
