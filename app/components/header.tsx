@@ -3,17 +3,41 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Moon, Sun, Wallet, ExternalLink, ChevronDown, Copy, Check } from "lucide-react"
+import {
+  Moon,
+  Sun,
+  Wallet,
+  ExternalLink,
+  ChevronDown,
+  Copy,
+  Check,
+  Menu,
+  Home,
+  BookOpen,
+  Layers,
+  BracketsIcon as Bridge,
+  Code,
+  Loader2,
+} from "lucide-react"
 import { useTheme } from "next-themes"
-import { useWallet } from "../contexts/wallet-context"
+import { useAccount, useDisconnect, useNetwork } from "@starknet-react/core"
 import { WalletConnectionModal } from "./wallet-connection-modal"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import HeaderLogo from "@/public/header_logo.png"
+import Image from "next/image"
 
 export function Header() {
   const [showWalletModal, setShowWalletModal] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { theme, setTheme } = useTheme()
-  const { isConnected, address, disconnectWallet } = useWallet()
+  const { address, isConnected, isConnecting } = useAccount()
+  const { disconnect } = useDisconnect()
+  const { chain } = useNetwork()
+  const pathname = usePathname()
 
   const copyAddress = async () => {
     if (address) {
@@ -27,63 +51,133 @@ export function Header() {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`
   }
 
+  const getNetworkBadge = () => {
+    if (!chain) return { name: "Unknown", color: "bg-gray-500/20 text-gray-400 border-gray-500/30" }
+
+    switch (chain.name.toLowerCase()) {
+      case "sepolia":
+        return { name: "Sepolia", color: "bg-green-500/20 text-green-400 border-green-500/30" }
+      case "mainnet":
+        return { name: "Mainnet", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" }
+      default:
+        return { name: chain.name, color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" }
+    }
+  }
+
+  const networkBadge = getNetworkBadge()
+
+  const navigation = [
+    { name: "Home", href: "/", icon: Home },
+    { name: "Documentation", href: "/docs", icon: BookOpen },
+    { name: "Architecture", href: "/docs/architecture", icon: Layers },
+    { name: "Bridge Guide", href: "/docs/bridge-guide", icon: Bridge },
+    { name: "API Reference", href: "/docs/api", icon: Code },
+  ]
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/"
+    return pathname.startsWith(href)
+  }
+
   return (
     <>
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold text-orange-400">⚡ Rune Etcher</div>
-              <Badge variant="secondary" className="bg-green-500/20 text-green-400 border-green-500/30">
-                Sepolia
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+            <Image src={HeaderLogo} alt="Rune Etcher Logo" width={200} height={60}/>  
+              {/* <div className="text-xl md:text-2xl font-bold text-orange-400">⚡ Rune Etcher</div> */}
+              <Badge variant="secondary" className={`hidden sm:flex ${networkBadge.color} text-xs`}>
+                {networkBadge.name}
               </Badge>
-            </div>
+            </Link>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-1">
+              {navigation.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link key={item.name} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`flex items-center gap-2 ${
+                        isActive(item.href)
+                          ? "bg-orange-500/20 text-orange-400"
+                          : "text-gray-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="hidden xl:inline">{item.name}</span>
+                    </Button>
+                  </Link>
+                )
+              })}
+            </nav>
+
+            {/* Right side actions */}
+            <div className="flex items-center space-x-2">
+              {/* Theme toggle */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="text-gray-300 hover:text-white"
+                className="text-gray-300 hover:text-white hover:bg-white/10"
               >
-                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
 
+              {/* GitHub link - hidden on mobile */}
               <Button
                 variant="outline"
                 size="sm"
-                className="border-gray-600 text-gray-300 hover:bg-gray-800 bg-transparent"
-                onClick={() => window.open("https://github.com/your-repo/rune-etcher", "_blank")}
+                className="hidden md:flex border-gray-600 text-gray-300 hover:bg-gray-800 bg-transparent text-xs"
+                onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher-main", "_blank")}
               >
-                <ExternalLink className="h-4 w-4 mr-2" />
+                <ExternalLink className="h-3 w-3 mr-1" />
                 GitHub
               </Button>
 
-              {isConnected ? (
+              {/* Wallet Connection */}
+              {isConnected && address ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
+                      size="sm"
                       className="border-orange-500 text-orange-400 hover:bg-orange-500/10 bg-transparent"
                     >
-                      <Wallet className="h-4 w-4 mr-2" />
-                      {address && formatAddress(address)}
-                      <ChevronDown className="h-4 w-4 ml-2" />
+                      <Wallet className="h-3 w-3 mr-1" />
+                      <span className="hidden sm:inline">{formatAddress(address)}</span>
+                      <ChevronDown className="h-3 w-3 ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-gray-900 border-gray-700">
-                    <DropdownMenuItem onClick={copyAddress} className="text-gray-300 hover:bg-gray-800">
+                  <DropdownMenuContent className="bg-gray-900 border-gray-700 dark:bg-gray-900 dark:border-gray-700 light:bg-white light:border-gray-300">
+                    <DropdownMenuItem
+                      onClick={copyAddress}
+                      className="text-gray-300 hover:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 light:text-gray-700 light:hover:bg-gray-100"
+                    >
                       {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                       {copied ? "Copied!" : "Copy Address"}
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => window.open(`https://sepolia.starkscan.co/contract/${address}`, "_blank")}
-                      className="text-gray-300 hover:bg-gray-800"
+                      onClick={() => {
+                        const explorerUrl =
+                          chain?.name.toLowerCase() === "sepolia"
+                            ? `https://sepolia.starkscan.co/contract/${address}`
+                            : `https://starkscan.co/contract/${address}`
+                        window.open(explorerUrl, "_blank")
+                      }}
+                      className="text-gray-300 hover:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 light:text-gray-700 light:hover:bg-gray-100"
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       View on Explorer
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={disconnectWallet} className="text-red-400 hover:bg-red-500/10">
+                    <DropdownMenuItem
+                      onClick={() => disconnect()}
+                      className="text-red-400 hover:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/10"
+                    >
                       Disconnect Wallet
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -91,12 +185,73 @@ export function Header() {
               ) : (
                 <Button
                   onClick={() => setShowWalletModal(true)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                  size="sm"
+                  disabled={isConnecting}
+                  className="bg-orange-500 hover:bg-orange-600 text-white disabled:opacity-50"
                 >
-                  <Wallet className="h-4 w-4 mr-2" />
-                  Connect Wallet
+                  <Wallet className="h-3 w-3 mr-1" />
+                  {isConnecting ? (
+                    <>
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      <span className="hidden sm:inline ml-1">Connecting...</span>
+                    </>
+                  ) : (
+                    <span className="hidden sm:inline">Connect</span>
+                  )}
                 </Button>
               )}
+
+              {/* Mobile menu */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="lg:hidden text-gray-300 hover:text-white">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-80 bg-gray-900 border-gray-700 dark:bg-gray-900 dark:border-gray-700 light:bg-white light:border-gray-300"
+                >
+                  <div className="flex flex-col space-y-4 mt-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold text-white dark:text-white light:text-gray-900">
+                        Navigation
+                      </h2>
+                      <Badge className={`${networkBadge.color} text-xs`}>{networkBadge.name}</Badge>
+                    </div>
+
+                    {navigation.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <Link key={item.name} href={item.href} onClick={() => setMobileMenuOpen(false)}>
+                          <Button
+                            variant="ghost"
+                            className={`w-full justify-start ${
+                              isActive(item.href)
+                                ? "bg-orange-500/20 text-orange-400"
+                                : "text-gray-300 hover:text-white hover:bg-white/10 dark:text-gray-300 dark:hover:text-white light:text-gray-700 light:hover:text-gray-900"
+                            }`}
+                          >
+                            <Icon className="h-4 w-4 mr-3" />
+                            {item.name}
+                          </Button>
+                        </Link>
+                      )
+                    })}
+
+                    <div className="border-t border-gray-700 dark:border-gray-700 light:border-gray-300 pt-4">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 dark:text-gray-300 dark:hover:text-white light:text-gray-700 light:hover:text-gray-900"
+                        onClick={() => window.open("https://github.com/jahrulezfrancis/rune-etcher-main", "_blank")}
+                      >
+                        <ExternalLink className="h-4 w-4 mr-3" />
+                        GitHub Repository
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
