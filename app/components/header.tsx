@@ -68,7 +68,7 @@ export function Header() {
 
   const navigation = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Documentation", href: "/docs", icon: BookOpen },
+    { name: "Docs", href: "/docs", icon: BookOpen },
     { name: "Architecture", href: "/docs/architecture", icon: Layers },
     { name: "Bridge Guide", href: "/docs/bridge-guide", icon: Bridge },
     { name: "API Reference", href: "/docs/api", icon: Code },
