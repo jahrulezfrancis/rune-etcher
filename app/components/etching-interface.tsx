@@ -43,6 +43,9 @@ export function EtchingInterface() {
   const { address, isConnected, isConnecting } = useAccount()
   const { chain } = useNetwork()
 
+  const isTestNetwork = chain?.name.toLowerCase() === "starknet sepolia testnet"
+
+
   const validateForm = () => {
     const newErrors: string[] = []
 
@@ -72,7 +75,7 @@ export function EtchingInterface() {
       return
     }
 
-    if (chain?.name.toLowerCase() !== "sepolia") {
+    if (!isTestNetwork) {
       alert("Please switch to Starknet Sepolia testnet!")
       return
     }
@@ -222,7 +225,7 @@ export function EtchingInterface() {
             </Alert>
           )}
 
-          {isConnected && chain?.name.toLowerCase() !== "sepolia" && (
+          {isConnected && !isTestNetwork && (
             <Alert className="border-red-500/30 bg-red-500/10">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription className="text-red-400 text-sm">
@@ -362,7 +365,7 @@ export function EtchingInterface() {
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Connecting Wallet...
               </>
-            ) : chain?.name.toLowerCase() !== "sepolia" ? (
+            ) : !isTestNetwork ? (
               <>
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Switch to Sepolia Testnet
